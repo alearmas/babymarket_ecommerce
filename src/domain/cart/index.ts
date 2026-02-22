@@ -84,3 +84,14 @@ export function buildWhatsAppUrl(args: {
 
   return `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
+
+export function buildInquiryUrl(query: string): string {
+  const lines = [
+    "🔍 *Hola! Estoy buscando un producto que no encontré en el catálogo:*",
+    "",
+    query.trim(),
+    "",
+    "¿Lo tenés disponible o podés conseguirlo? 🙏",
+  ];
+  return `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
+}

@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import "./App.css";
 import { useCatalog } from "./hooks/useCatalog";
-import CategoryGrid from "./components/CategoryGrid";
 import ProductList from "./components/ProductList";
 import ProductFilters from "./components/ProductFilters";
+import ProductInquiry from "./components/ProductInquiry";
 import CartModal from "./components/CartModal";
 import {
   type Cart,
@@ -18,8 +18,7 @@ import {
 } from "./domain/cart";
 
 export default function App() {
-  const { items, categories, loading, error } = useCatalog();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { items, loading, error } = useCatalog();
 
   // Filters
   const [filterBrand, setFilterBrand] = useState<string | null>(null);
@@ -32,19 +31,13 @@ export default function App() {
   const [note, setNote] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("efectivo");
 
-  // Items in the selected category (before brand/size filters)
-  const categoryItems = useMemo(
-    () => (selectedCategory ? items.filter((i) => i.category === selectedCategory) : []),
-    [items, selectedCategory]
-  );
-
   // Items after applying brand + size filters
   const visibleItems = useMemo(() => {
-    let filtered = categoryItems;
+    let filtered = items;
     if (filterBrand) filtered = filtered.filter((i) => i.brand === filterBrand);
     if (filterSize) filtered = filtered.filter((i) => i.size === filterSize);
     return filtered;
-  }, [categoryItems, filterBrand, filterSize]);
+  }, [items, filterBrand, filterSize]);
 
   const cartItems = useMemo(() => buildCartItems(cart, items), [cart, items]);
   const subtotal = useMemo(() => calcSubtotal(cartItems), [cartItems]);
@@ -72,18 +65,6 @@ export default function App() {
 
   const clear = () => setCart({});
 
-  const handleSelectCategory = (cat: string) => {
-    setSelectedCategory(cat);
-    setFilterBrand(null);
-    setFilterSize(null);
-  };
-
-  const handleBack = () => {
-    setSelectedCategory(null);
-    setFilterBrand(null);
-    setFilterSize(null);
-  };
-
   const sendWhatsApp = () => {
     if (cartItems.length === 0)
       return alert("Agregá al menos un producto antes de enviar el pedido.");
@@ -99,7 +80,7 @@ export default function App() {
         <div className="header-inner">
           <div>
             <div className="brand">BabyMarket</div>
-            <div className="sub">{selectedCategory ?? "Elegí una categoría"}</div>
+            <div className="sub">Todos los productos</div>
           </div>
           <button className="cart-btn" type="button" onClick={() => setIsCartOpen(true)}>
             🛒 <span className="cart-badge">{totalItems}</span>
@@ -114,40 +95,24 @@ export default function App() {
 
       <main className="main">
         <section className="card">
-          {!selectedCategory ? (
-            <>
-              <div className="section-header">
-                <h2 className="m-0">Categorías</h2>
-              </div>
-              <CategoryGrid categories={categories} onSelect={handleSelectCategory} />
-            </>
+          <ProductFilters
+            items={items}
+            brand={filterBrand}
+            setBrand={setFilterBrand}
+            size={filterSize}
+            setSize={setFilterSize}
+          />
+
+          {visibleItems.length === 0 ? (
+            <div className="empty-state">
+              <p className="muted">No hay productos con esos filtros.</p>
+            </div>
           ) : (
-            <>
-              <div className="section-header">
-                <button className="btn2" type="button" onClick={handleBack}>
-                  ← Volver
-                </button>
-                <h2 className="m-0">{selectedCategory}</h2>
-              </div>
-
-              <ProductFilters
-                items={categoryItems}
-                brand={filterBrand}
-                setBrand={setFilterBrand}
-                size={filterSize}
-                setSize={setFilterSize}
-              />
-
-              {visibleItems.length === 0 ? (
-                <div className="empty-state">
-                  <p className="muted">No hay productos con esos filtros.</p>
-                </div>
-              ) : (
-                <ProductList items={visibleItems} onAdd={addToCart} />
-              )}
-            </>
+            <ProductList items={visibleItems} onAdd={addToCart} />
           )}
         </section>
+
+        <ProductInquiry />
       </main>
 
       <CartModal

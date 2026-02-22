@@ -582,6 +582,18 @@
   color: #1a1a2e;
 }
 
+/* --- Pre-order / out-of-stock badge --- */
+.preorder-badge {
+  display: inline-block;
+  margin-top: 4px;
+  background: #fff8e6;
+  color: #a67c00;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 /* --- Promo banner (global, below header) --- */
 .promo-banner {
   background: linear-gradient(90deg, #25D366 0%, #1fba59 100%);
@@ -636,6 +648,54 @@
 .shipping-free-text {
   color: #25D366;
   font-weight: 700;
+}
+
+/* --- Product inquiry section --- */
+.inquiry-section {
+  background: #f0f4f8;
+  border-radius: 14px;
+  padding: 20px 16px;
+  margin-top: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.inquiry-icon {
+  font-size: 28px;
+}
+
+.inquiry-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.inquiry-desc {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+  max-width: 320px;
+}
+
+.inquiry-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.inquiry-row .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.inquiry-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 /* ============================

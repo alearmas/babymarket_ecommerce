@@ -31,14 +31,14 @@ export default function ProductList({ items, onAdd }: Props) {
             <div>
               <div className="p-name">{it.title}</div>
               {it.subtitle && <div className="muted">{it.subtitle}</div>}
-              <div className="muted">Stock: {it.stock}</div>
+              {out && <div className="preorder-badge">Disponible en 24–48 hs</div>}
             </div>
 
             {/* --- Price & add --- */}
             <div className="row">
               <div className="sale-price">{fmtARS(it.salePrice)}</div>
-              <button className="btn" type="button" disabled={out} onClick={() => onAdd(it.id)}>
-                {out ? "Sin stock" : "Agregar"}
+              <button className="btn" type="button" onClick={() => onAdd(it.id)}>
+                {out ? "Solicitar" : "Agregar"}
               </button>
             </div>
           </div>
