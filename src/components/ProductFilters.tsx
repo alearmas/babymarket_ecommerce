@@ -4,6 +4,9 @@ import type { CatalogItem } from "../domain/catalog";
 type Props = {
   items: CatalogItem[];
 
+  search: string;
+  setSearch: (v: string) => void;
+
   brand: string | null;
   setBrand: (v: string | null) => void;
 
@@ -17,6 +20,8 @@ type Props = {
  */
 export default function ProductFilters({
   items,
+  search,
+  setSearch,
   brand,
   setBrand,
   size,
@@ -41,10 +46,24 @@ export default function ProductFilters({
   const showBrands = brands.length > 1;
   const showSizes = sizes.length > 1;
 
-  if (!showBrands && !showSizes) return null;
-
   return (
     <div className="filters">
+      {/* --- Search bar --- */}
+      <div className="search-wrap">
+        <span className="search-icon">🔍</span>
+        <input
+          className="search-input"
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar producto, marca..."
+        />
+        {search && (
+          <button className="search-clear" type="button" onClick={() => setSearch("")} aria-label="Limpiar búsqueda">
+            ✕
+          </button>
+        )}
+      </div>
       {showBrands && (
         <div className="filter-row">
           <span className="filter-label">Marca</span>

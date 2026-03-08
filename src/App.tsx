@@ -21,6 +21,7 @@ export default function App() {
   const { items, loading, error } = useCatalog();
 
   // Filters
+  const [filterSearch, setFilterSearch] = useState("");
   const [filterBrand, setFilterBrand] = useState<string | null>(null);
   const [filterSize, setFilterSize] = useState<string | null>(null);
 
@@ -31,13 +32,23 @@ export default function App() {
   const [note, setNote] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("efectivo");
 
-  // Items after applying brand + size filters
+  // Items after applying search + brand + size filters
   const visibleItems = useMemo(() => {
     let filtered = items;
+    if (filterSearch.trim()) {
+      const q = filterSearch.trim().toLowerCase();
+      filtered = filtered.filter(
+        (i) =>
+          i.title.toLowerCase().includes(q) ||
+          i.subtitle?.toLowerCase().includes(q) ||
+          i.brand?.toLowerCase().includes(q) ||
+          i.category?.toLowerCase().includes(q)
+      );
+    }
     if (filterBrand) filtered = filtered.filter((i) => i.brand === filterBrand);
     if (filterSize) filtered = filtered.filter((i) => i.size === filterSize);
     return filtered;
-  }, [items, filterBrand, filterSize]);
+  }, [items, filterSearch, filterBrand, filterSize]);
 
   const cartItems = useMemo(() => buildCartItems(cart, items), [cart, items]);
   const subtotal = useMemo(() => calcSubtotal(cartItems), [cartItems]);
@@ -97,6 +108,8 @@ export default function App() {
         <section className="card">
           <ProductFilters
             items={items}
+            search={filterSearch}
+            setSearch={setFilterSearch}
             brand={filterBrand}
             setBrand={setFilterBrand}
             size={filterSize}
