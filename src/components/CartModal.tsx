@@ -70,6 +70,7 @@ export default function CartModal({
   if (!open) return null;
 
   const total = subtotal + shipping;
+  const shippingProgress = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
   const missingForFree = FREE_SHIPPING_THRESHOLD - subtotal;
 
   return (
@@ -81,8 +82,11 @@ export default function CartModal({
         aria-modal="true"
         aria-label="Carrito"
       >
+        {/* --- Drag handle --- */}
+        <div className="modal-handle" />
+
         <div className="modal-header">
-          <h2 className="m-0">Tu pedido</h2>
+          <h2 className="m-0">Tu pedido 🛍️</h2>
           <button className="icon-btn" type="button" onClick={onClose} aria-label="Cerrar">
             ✕
           </button>
@@ -91,25 +95,45 @@ export default function CartModal({
         {cartItems.length === 0 ? (
           <div className="empty-cart">
             <span className="empty-cart-icon">🛒</span>
-            <p className="muted">El carrito está vacío.</p>
+            <p className="empty-cart-title">Tu carrito está vacío</p>
+            <p className="muted">Agregá productos para empezar tu pedido</p>
           </div>
         ) : (
           <div className="stack">
-            {/* --- Free shipping banner --- */}
-            {shipping === 0 ? (
-              <div className="shipping-banner shipping-banner--free">
-                🚚 ¡Envío gratis!
+            {/* --- Free shipping progress --- */}
+            <div className="shipping-progress-wrap">
+              <div className="shipping-progress-header">
+                {shipping === 0 ? (
+                  <span className="shipping-progress-label shipping-progress-label--free">
+                    🚚 ¡Tenés envío gratis!
+                  </span>
+                ) : (
+                  <span className="shipping-progress-label">
+                    🚚 Sumá <strong>{fmtARS(missingForFree)}</strong> más para envío gratis
+                  </span>
+                )}
               </div>
-            ) : (
-              <div className="shipping-banner shipping-banner--pending">
-                🚚 Sumá {fmtARS(missingForFree)} más para envío gratis
+              <div className="shipping-progress-track">
+                <div
+                  className="shipping-progress-fill"
+                  style={{ width: `${shippingProgress}%` }}
+                />
               </div>
-            )}
+            </div>
 
             {/* --- Cart items list --- */}
             <div className="cart-items-list">
               {cartItems.map(({ product, qty }) => (
                 <div key={product.id} className="cart-item">
+                  {/* Thumbnail */}
+                  <div className="cart-item-thumb">
+                    {product.photo ? (
+                      <img src={product.photo} alt={product.title} />
+                    ) : (
+                      <span>📦</span>
+                    )}
+                  </div>
+
                   <div className="cart-item-info">
                     <div className="cart-item-name">{product.title}</div>
                     <div className="muted">{fmtARS(product.salePrice)} c/u</div>
@@ -141,8 +165,7 @@ export default function CartModal({
             </div>
 
             {/* --- Totals --- */}
-            <div className="hr" />
-            <div className="totals-section">
+            <div className="totals-card">
               <div className="totals-line">
                 <span className="muted">Subtotal</span>
                 <span>{fmtARS(subtotal)}</span>
@@ -150,7 +173,7 @@ export default function CartModal({
               <div className="totals-line">
                 <span className="muted">Envío</span>
                 <span className={shipping === 0 ? "shipping-free-text" : ""}>
-                  {shipping === 0 ? "GRATIS" : fmtARS(shipping)}
+                  {shipping === 0 ? "GRATIS ✅" : fmtARS(shipping)}
                 </span>
               </div>
               <div className="totals-line totals-line--total">
@@ -170,7 +193,10 @@ export default function CartModal({
                     className={`payment-btn ${paymentMethod === method ? "payment-btn--active" : ""}`}
                     onClick={() => setPaymentMethod(method)}
                   >
-                    {method === "efectivo" ? "💵" : "🏦"} {PAYMENT_LABELS[method]}
+                    <span className="payment-btn-icon">
+                      {method === "efectivo" ? "💵" : "🏦"}
+                    </span>
+                    <span>{PAYMENT_LABELS[method]}</span>
                   </button>
                 ))}
               </div>
@@ -178,7 +204,7 @@ export default function CartModal({
 
             {/* --- Address --- */}
             <div className="field">
-              <label className="field-label">Dirección / Zona de entrega</label>
+              <label className="field-label">📍 Dirección / Zona de entrega</label>
               <input
                 className="input"
                 value={neighborhood}
@@ -189,7 +215,7 @@ export default function CartModal({
 
             {/* --- Note --- */}
             <div className="field">
-              <label className="field-label">Nota (opcional)</label>
+              <label className="field-label">📝 Nota (opcional)</label>
               <textarea
                 className="textarea"
                 rows={2}
@@ -200,12 +226,13 @@ export default function CartModal({
             </div>
 
             {/* --- Actions --- */}
-            <div className="cart-actions">
-              <button className="btn2" type="button" onClick={onClear}>
-                Vaciar carrito
+            <div className="cart-actions-v2">
+              <button className="btn-whatsapp" type="button" onClick={onSendWhatsApp}>
+                <span className="btn-whatsapp-icon">💬</span>
+                Enviar pedido por WhatsApp
               </button>
-              <button className="btn3" type="button" onClick={onSendWhatsApp}>
-                📱 Enviar por WhatsApp
+              <button className="btn-clear" type="button" onClick={onClear}>
+                Vaciar carrito
               </button>
             </div>
           </div>

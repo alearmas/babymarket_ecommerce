@@ -24,13 +24,13 @@
 
 /* --- Header --- */
 .header {
-  background: #487CB8;
+  background: linear-gradient(135deg, #3d6da8 0%, #487CB8 60%, #5a8ec9 100%);
   color: #fff;
   padding: 14px 16px;
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 12px rgba(72, 124, 184, 0.35);
 }
 
 .header-inner {
@@ -44,35 +44,37 @@
 
 .brand {
   font-weight: 900;
-  font-size: 20px;
-  letter-spacing: -0.3px;
+  font-size: 22px;
+  letter-spacing: -0.5px;
 }
 
 .sub {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
   margin-top: 2px;
+  letter-spacing: 0.2px;
 }
 
 /* --- Cart button (header) --- */
 .cart-btn {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
-  border: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
-  padding: 8px 14px;
+  padding: 8px 16px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s;
 }
 
 .cart-btn:hover {
   background: rgba(255, 255, 255, 0.3);
-  border-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.04);
 }
 
 .cart-badge {
@@ -96,9 +98,9 @@
 
 .card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
 }
 
 /* --- Section header --- */
@@ -113,7 +115,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 /* --- Category cards --- */
@@ -138,19 +140,28 @@
 /* --- Product cards --- */
 .product {
   border: 1px solid #eee;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 10px;
+  background: #fff;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: default;
+}
+
+.product:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(72, 124, 184, 0.12);
+  border-color: #dde8f5;
 }
 
 /* --- Product image --- */
 .product-img-wrap {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
   background: #f6f7f9;
 }
@@ -160,6 +171,11 @@
   height: 100%;
   object-fit: contain;
   display: block;
+  transition: transform 0.25s ease;
+}
+
+.product:hover .product-img {
+  transform: scale(1.04);
 }
 
 .product-img-placeholder {
@@ -192,7 +208,7 @@
 }
 
 .total {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
   color: #1a1a2e;
 }
@@ -218,18 +234,24 @@
   cursor: pointer;
   font-weight: 700;
   font-size: 13px;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s, transform 0.15s;
 }
 
 .btn:hover {
   opacity: 0.9;
+  transform: scale(1.03);
   border-color: transparent;
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn:disabled {
   background: #ccc;
   color: #888;
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn2 {
@@ -273,18 +295,19 @@
   background-color: #fff;
   color: #1a1a2e;
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e0e0e0;
   font-size: 14px;
   font-family: inherit;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .input:focus,
 .textarea:focus {
   outline: none;
   border-color: #487CB8;
+  box-shadow: 0 0 0 3px rgba(72, 124, 184, 0.12);
 }
 
 .textarea {
@@ -300,8 +323,8 @@
 
 .field-label {
   font-size: 13px;
-  font-weight: 600;
-  color: #555;
+  font-weight: 700;
+  color: #444;
 }
 
 /* --- Stack (vertical spacing) --- */
@@ -315,12 +338,13 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   z-index: 100;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding: 0;
+  backdrop-filter: blur(2px);
 }
 
 .modal {
@@ -328,19 +352,30 @@
   width: 100%;
   max-width: 520px;
   max-height: 92vh;
-  border-radius: 20px 20px 0 0;
-  padding: 20px;
+  border-radius: 24px 24px 0 0;
+  padding: 12px 20px 20px;
   overflow-y: auto;
-  animation: slideUp 0.25s ease-out;
+  animation: slideUp 0.28s cubic-bezier(0.34, 1.1, 0.64, 1);
 }
 
 @keyframes slideUp {
   from {
     transform: translateY(100%);
+    opacity: 0.6;
   }
   to {
     transform: translateY(0);
+    opacity: 1;
   }
+}
+
+/* --- Modal drag handle --- */
+.modal-handle {
+  width: 40px;
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 999px;
+  margin: 0 auto 14px;
 }
 
 .modal-header {
@@ -356,7 +391,7 @@
   border-radius: 999px;
   width: 36px;
   height: 36px;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -375,13 +410,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 0;
-  gap: 8px;
+  padding: 40px 0 32px;
+  gap: 6px;
 }
 
 .empty-cart-icon {
-  font-size: 40px;
-  opacity: 0.4;
+  font-size: 52px;
+  opacity: 0.35;
+  margin-bottom: 4px;
+}
+
+.empty-cart-title {
+  font-weight: 800;
+  font-size: 16px;
+  margin: 0;
+  color: #333;
 }
 
 /* --- Cart items --- */
@@ -393,12 +436,38 @@
 
 .cart-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 10px;
   border: 1px solid #f0f0f0;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 10px 12px;
+  background: #fafafa;
+  transition: border-color 0.15s;
+}
+
+.cart-item:hover {
+  border-color: #dde8f5;
+}
+
+/* --- Cart item thumbnail --- */
+.cart-item-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f0f4f8;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.cart-item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .cart-item-info {
@@ -436,7 +505,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  background: #f6f7f9;
+  background: #eef2f7;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -458,7 +527,7 @@
 }
 
 .qty-btn:hover {
-  background: #e8ecf1;
+  background: #d8e6f5;
   border-color: transparent;
 }
 
@@ -467,6 +536,42 @@
   text-align: center;
   font-weight: 800;
   font-size: 14px;
+}
+
+/* --- Totals card --- */
+.totals-card {
+  background: #f8fafc;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.totals-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.totals-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.totals-line--total {
+  font-weight: 800;
+  padding-top: 8px;
+  border-top: 1.5px dashed #e0e0e0;
+  margin-top: 2px;
+}
+
+.shipping-free-text {
+  color: #1a8a4a;
+  font-weight: 800;
 }
 
 /* --- Payment method --- */
@@ -478,33 +583,145 @@
 
 .payment-btn {
   background: #f6f7f9;
-  border: 2px solid #eee;
-  border-radius: 10px;
-  padding: 10px;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 12px 10px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
   color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.payment-btn-icon {
+  font-size: 22px;
 }
 
 .payment-btn:hover {
   border-color: #487CB8;
   color: #487CB8;
+  background: #f0f4fb;
 }
 
 .payment-btn--active {
   background: #e8f0fa;
   border-color: #487CB8;
   color: #487CB8;
+  box-shadow: 0 2px 8px rgba(72, 124, 184, 0.15);
 }
 
-/* --- Cart actions --- */
+/* --- Cart actions v2 --- */
+.cart-actions-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* --- Cart actions (legacy) --- */
 .cart-actions {
   display: flex;
   gap: 10px;
   margin-top: 4px;
+}
+
+/* --- WhatsApp CTA button --- */
+.btn-whatsapp {
+  background: linear-gradient(135deg, #25D366 0%, #20c05a 100%);
+  color: #fff;
+  border: 0;
+  border-radius: 16px;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 16px;
+  width: 100%;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.1px;
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.45);
+}
+
+.btn-whatsapp:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+}
+
+.btn-whatsapp-icon {
+  font-size: 20px;
+}
+
+/* --- Clear cart button --- */
+.btn-clear {
+  background: transparent;
+  color: #aaa;
+  border: 0;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  transition: color 0.15s;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+
+.btn-clear:hover {
+  color: #e74c3c;
+  text-decoration-color: #faa;
+  border-color: transparent;
+}
+
+/* --- Shipping progress bar --- */
+.shipping-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.shipping-progress-header {
+  display: flex;
+  align-items: center;
+}
+
+.shipping-progress-label {
+  font-size: 13px;
+  color: #555;
+}
+
+.shipping-progress-label--free {
+  color: #1a8a4a;
+  font-weight: 700;
+}
+
+.shipping-progress-track {
+  background: #e0e7ef;
+  border-radius: 999px;
+  height: 7px;
+  overflow: hidden;
+}
+
+.shipping-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #25D366, #1fba59);
+  transition: width 0.5s cubic-bezier(0.34, 1.1, 0.64, 1);
 }
 
 /* --- Filters --- */
@@ -578,7 +795,7 @@
 /* --- Sale price (product card) --- */
 .sale-price {
   font-weight: 900;
-  font-size: 15px;
+  font-size: 16px;
   color: #1a1a2e;
 }
 
@@ -599,10 +816,10 @@
   background: linear-gradient(90deg, #25D366 0%, #1fba59 100%);
   color: #fff;
   text-align: center;
-  padding: 8px 16px;
+  padding: 9px 16px;
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
 }
 
 /* --- Shipping banners (in cart) --- */
@@ -624,47 +841,22 @@
   color: #a67c00;
 }
 
-/* --- Totals section (cart) --- */
-.totals-section {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.totals-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.totals-line--total {
-  font-weight: 800;
-  padding-top: 6px;
-  border-top: 1px solid #eee;
-  margin-top: 2px;
-}
-
-.shipping-free-text {
-  color: #25D366;
-  font-weight: 700;
-}
-
 /* --- Product inquiry section --- */
 .inquiry-section {
-  background: #f0f4f8;
-  border-radius: 14px;
-  padding: 20px 16px;
+  background: linear-gradient(135deg, #f0f4f8, #e8f0fa);
+  border-radius: 16px;
+  padding: 22px 16px;
   margin-top: 16px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  border: 1px solid #dde8f5;
 }
 
 .inquiry-icon {
-  font-size: 28px;
+  font-size: 30px;
 }
 
 .inquiry-title {
@@ -708,7 +900,7 @@
   }
 
   .modal {
-    border-radius: 20px;
+    border-radius: 24px;
     max-height: 85vh;
   }
 
