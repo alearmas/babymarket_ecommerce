@@ -73,6 +73,25 @@ describe("CartModal", () => {
     expect(onClear).toHaveBeenCalled();
   });
 
+  it("moves focus to the close button when it opens", () => {
+    render(<CartModal {...baseProps} cartItems={[]} />);
+    expect(document.activeElement).toHaveAttribute("aria-label", "Cerrar");
+  });
+
+  it("restores focus to the previously focused element when it closes", () => {
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { rerender } = render(<CartModal {...baseProps} open={true} cartItems={[]} />);
+    expect(document.activeElement).not.toBe(trigger);
+
+    rerender(<CartModal {...baseProps} open={false} cartItems={[]} />);
+    expect(document.activeElement).toBe(trigger);
+
+    document.body.removeChild(trigger);
+  });
+
   it("removes the item (rather than decrementing) when quantity is 1", () => {
     const onRemove = vi.fn();
     const onDecrement = vi.fn();

@@ -72,4 +72,27 @@ describe("ProductFilters — category row", () => {
     await user.click(screen.getByRole("button", { name: "Higiene" }));
     expect(setCategory).toHaveBeenCalledWith(null);
   });
+
+  it("marks the active chip with aria-pressed for screen readers", () => {
+    render(
+      <ProductFilters
+        items={[item({ category: "Pañales" }), item({ category: "Higiene" })]}
+        search=""
+        setSearch={vi.fn()}
+        category="Higiene"
+        setCategory={vi.fn()}
+        brand={null}
+        setBrand={vi.fn()}
+        size={null}
+        setSize={vi.fn()}
+      />
+    );
+    expect(screen.getByRole("button", { name: "Higiene" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Todas" })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("gives the search input an accessible name beyond the placeholder", () => {
+    setup([item({ category: "Pañales" })]);
+    expect(screen.getByRole("searchbox", { name: "Buscar producto o marca" })).toBeInTheDocument();
+  });
 });

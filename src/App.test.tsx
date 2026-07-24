@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
@@ -8,6 +8,10 @@ import type { InventoryItemDTO } from "./services/schemas";
 vi.mock("./services/catalog", () => ({
   fetchProducts: vi.fn(),
 }));
+
+beforeEach(() => {
+  vi.mocked(fetchProducts).mockReset();
+});
 
 const dto = (overrides: Partial<InventoryItemDTO>): InventoryItemDTO => ({
   productID: Math.random().toString(),
@@ -88,6 +92,20 @@ describe("App — catalog rendering", () => {
     vi.mocked(fetchProducts).mockRejectedValue(new Error("No se pudo cargar el catálogo. Intentá de nuevo más tarde."));
     render(<App />);
     expect(await screen.findByText(/No se pudo cargar el catálogo/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reintentar" })).toBeInTheDocument();
+  });
+
+  it("retries fetching the catalog when 'Reintentar' is clicked", async () => {
+    const user = userEvent.setup();
+    vi.mocked(fetchProducts).mockRejectedValueOnce(new Error("No se pudo cargar el catálogo."));
+    render(<App />);
+    await screen.findByRole("button", { name: "Reintentar" });
+
+    vi.mocked(fetchProducts).mockResolvedValueOnce([dto({ productID: "a", presentation: "Toallitas" })]);
+    await user.click(screen.getByRole("button", { name: "Reintentar" }));
+
+    expect(await screen.findByText("Huggies Toallitas")).toBeInTheDocument();
+    expect(fetchProducts).toHaveBeenCalledTimes(2);
   });
 });
 

@@ -1,5 +1,6 @@
 import type { CatalogItem } from "../domain/catalog";
 import { fmtARS } from "../domain/cart";
+import ProductImage from "./ProductImage";
 
 type Props = {
   items: CatalogItem[];
@@ -15,16 +16,12 @@ export default function ProductList({ items, onAdd }: Props) {
           <div key={it.id} className="product">
             {/* --- Product image --- */}
             <div className="product-img-wrap">
-              {it.photo ? (
-                <img
-                  className="product-img"
-                  src={it.photo}
-                  alt={it.title}
-                  loading="lazy"
-                />
-              ) : (
-                <div className="product-img-placeholder">📦</div>
-              )}
+              <ProductImage
+                src={it.photo}
+                alt={it.title}
+                imgClassName="product-img"
+                placeholderClassName="product-img-placeholder"
+              />
             </div>
 
             {/* --- Product info --- */}

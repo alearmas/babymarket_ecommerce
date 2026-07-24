@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   fmtARS,
   PAYMENT_LABELS,
@@ -6,6 +6,7 @@ import {
   type CartItem,
   type PaymentMethod,
 } from "../domain/cart";
+import ProductImage from "./ProductImage";
 
 type Props = {
   open: boolean;
@@ -50,12 +51,20 @@ export default function CartModal({
   onClear,
   onSendWhatsApp,
 }: Props) {
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (!open) return;
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
+
+    // Move focus into the dialog for keyboard/screen-reader users, and
+    // give it back to whatever triggered the modal (usually the cart button)
+    // once it closes.
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    closeBtnRef.current?.focus();
 
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -64,6 +73,7 @@ export default function CartModal({
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
+      previouslyFocused?.focus();
     };
   }, [open, onClose]);
 
@@ -87,7 +97,7 @@ export default function CartModal({
 
         <div className="modal-header">
           <h2 className="m-0">Tu pedido 🛍️</h2>
-          <button className="icon-btn" type="button" onClick={onClose} aria-label="Cerrar">
+          <button ref={closeBtnRef} className="icon-btn" type="button" onClick={onClose} aria-label="Cerrar">
             ✕
           </button>
         </div>
@@ -128,11 +138,7 @@ export default function CartModal({
                 <div key={product.id} className="cart-item">
                   {/* Thumbnail */}
                   <div className="cart-item-thumb">
-                    {product.photo ? (
-                      <img src={product.photo} alt={product.title} />
-                    ) : (
-                      <span>📦</span>
-                    )}
+                    <ProductImage src={product.photo} alt={product.title} />
                   </div>
 
                   <div className="cart-item-info">

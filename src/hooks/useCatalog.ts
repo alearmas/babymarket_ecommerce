@@ -6,6 +6,7 @@ export function useCatalog() {
   const [raw, setRaw] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryToken, setRetryToken] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -25,12 +26,14 @@ export function useCatalog() {
     })();
 
     return () => controller.abort();
-  }, []);
+  }, [retryToken]);
 
   const categories = useMemo(() => {
     const set = new Set(raw.map((x) => x.category));
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [raw]);
 
-  return { items: raw, categories, loading, error };
+  const retry = () => setRetryToken((t) => t + 1);
+
+  return { items: raw, categories, loading, error, retry };
 }

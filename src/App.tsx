@@ -18,7 +18,7 @@ import {
 } from "./domain/cart";
 
 export default function App() {
-  const { items, loading, error } = useCatalog();
+  const { items, loading, error, retry } = useCatalog();
 
   // Filters
   const [filterSearch, setFilterSearch] = useState("");
@@ -59,8 +59,30 @@ export default function App() {
   const shipping = useMemo(() => calcShipping(subtotal), [subtotal]);
   const totalItems = useMemo(() => calcTotalItems(cartItems), [cartItems]);
 
-  if (loading) return <div className="page center">Cargando catálogo…</div>;
-  if (error) return <div className="page center">{error}</div>;
+  if (loading) {
+    return (
+      <div className="page center">
+        <div className="loading-state">
+          <div className="spinner" role="status" aria-label="Cargando" />
+          <p className="muted">Cargando catálogo…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page center">
+        <div className="error-state">
+          <span className="error-state-icon" aria-hidden="true">⚠️</span>
+          <p>{error}</p>
+          <button className="btn" type="button" onClick={retry}>
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const addToCart = (id: string) => setCart((p) => ({ ...p, [id]: (p[id] ?? 0) + 1 }));
 

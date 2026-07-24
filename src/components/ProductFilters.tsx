@@ -61,13 +61,14 @@ export default function ProductFilters({
     <div className="filters">
       {/* --- Search bar --- */}
       <div className="search-wrap">
-        <span className="search-icon">🔍</span>
+        <span className="search-icon" aria-hidden="true">🔍</span>
         <input
           className="search-input"
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar producto, marca..."
+          aria-label="Buscar producto o marca"
         />
         {search && (
           <button className="search-clear" type="button" onClick={() => setSearch("")} aria-label="Limpiar búsqueda">
@@ -77,11 +78,12 @@ export default function ProductFilters({
       </div>
       {showCategories && (
         <div className="filter-row">
-          <span className="filter-label">Categoría</span>
-          <div className="filter-chips">
+          <span className="filter-label" id="filter-category-label">Categoría</span>
+          <div className="filter-chips" role="group" aria-labelledby="filter-category-label">
             <button
               type="button"
               className={`chip ${category === null ? "chip--active" : ""}`}
+              aria-pressed={category === null}
               onClick={() => setCategory(null)}
             >
               Todas
@@ -91,6 +93,7 @@ export default function ProductFilters({
                 key={c}
                 type="button"
                 className={`chip ${category === c ? "chip--active" : ""}`}
+                aria-pressed={category === c}
                 onClick={() => setCategory(category === c ? null : c)}
               >
                 {c}
@@ -101,11 +104,12 @@ export default function ProductFilters({
       )}
       {showBrands && (
         <div className="filter-row">
-          <span className="filter-label">Marca</span>
-          <div className="filter-chips">
+          <span className="filter-label" id="filter-brand-label">Marca</span>
+          <div className="filter-chips" role="group" aria-labelledby="filter-brand-label">
             <button
               type="button"
               className={`chip ${brand === null ? "chip--active" : ""}`}
+              aria-pressed={brand === null}
               onClick={() => setBrand(null)}
             >
               Todas
@@ -115,6 +119,7 @@ export default function ProductFilters({
                 key={b}
                 type="button"
                 className={`chip ${brand === b ? "chip--active" : ""}`}
+                aria-pressed={brand === b}
                 onClick={() => setBrand(brand === b ? null : b)}
               >
                 {b}
@@ -126,11 +131,12 @@ export default function ProductFilters({
 
       {showSizes && (
         <div className="filter-row">
-          <span className="filter-label">Talle</span>
-          <div className="filter-chips">
+          <span className="filter-label" id="filter-size-label">Talle</span>
+          <div className="filter-chips" role="group" aria-labelledby="filter-size-label">
             <button
               type="button"
               className={`chip ${size === null ? "chip--active" : ""}`}
+              aria-pressed={size === null}
               onClick={() => setSize(null)}
             >
               Todos
@@ -140,6 +146,7 @@ export default function ProductFilters({
                 key={s}
                 type="button"
                 className={`chip ${size === s ? "chip--active" : ""}`}
+                aria-pressed={size === s}
                 onClick={() => setSize(size === s ? null : s)}
               >
                 {s}
