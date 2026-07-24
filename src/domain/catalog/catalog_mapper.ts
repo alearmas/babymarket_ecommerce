@@ -1,16 +1,22 @@
 import type { CatalogItem } from "./types";
 import type { InventoryItemDTO } from "../../services/schemas";
 
+/** Spanish labels for the sizeUnit values used by inventory-service. */
+const SIZE_UNIT_LABELS: Record<string, string> = {
+  UNIT: "u",
+  SHEETS: "hojas",
+  ML: "ml",
+  GR: "gr",
+};
+
 /** Maps an API DTO to a CatalogItem domain model. */
 export function toCatalogItem(dto: InventoryItemDTO): CatalogItem {
   const nameParts = [dto.brand, dto.presentation].filter(Boolean);
   const title = nameParts.join(" ").replace(/\s+/g, " ").trim();
 
   const size = dto.size ? `Talle ${dto.size}` : "";
-  const pack =
-    dto.unitsPerPackage != null
-      ? `Pack ${dto.unitsPerPackage}${dto.sizeUnit === "UNIT" ? " u" : ` ${dto.sizeUnit}`}`
-      : "";
+  const unitLabel = dto.sizeUnit ? SIZE_UNIT_LABELS[dto.sizeUnit] ?? dto.sizeUnit.toLowerCase() : "";
+  const pack = dto.unitsPerPackage != null ? `Pack ${dto.unitsPerPackage} ${unitLabel}`.trim() : "";
 
   const subtitle = [size, pack].filter(Boolean).join(" · ");
 

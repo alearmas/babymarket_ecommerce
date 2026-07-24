@@ -22,6 +22,7 @@ export default function App() {
 
   // Filters
   const [filterSearch, setFilterSearch] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string | null>(null);
   const [filterBrand, setFilterBrand] = useState<string | null>(null);
   const [filterSize, setFilterSize] = useState<string | null>(null);
 
@@ -45,10 +46,13 @@ export default function App() {
           i.category?.toLowerCase().includes(q)
       );
     }
+    if (filterCategory) filtered = filtered.filter((i) => i.category === filterCategory);
     if (filterBrand) filtered = filtered.filter((i) => i.brand === filterBrand);
     if (filterSize) filtered = filtered.filter((i) => i.size === filterSize);
-    return filtered;
-  }, [items, filterSearch, filterBrand, filterSize]);
+
+    // In-stock items first; out-of-stock items (pedido a 24-48hs) sink to the end.
+    return [...filtered].sort((a, b) => Number(a.stock <= 0) - Number(b.stock <= 0));
+  }, [items, filterSearch, filterCategory, filterBrand, filterSize]);
 
   const cartItems = useMemo(() => buildCartItems(cart, items), [cart, items]);
   const subtotal = useMemo(() => calcSubtotal(cartItems), [cartItems]);
@@ -110,6 +114,8 @@ export default function App() {
             items={items}
             search={filterSearch}
             setSearch={setFilterSearch}
+            category={filterCategory}
+            setCategory={setFilterCategory}
             brand={filterBrand}
             setBrand={setFilterBrand}
             size={filterSize}

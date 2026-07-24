@@ -99,6 +99,7 @@ export default function CartModal({
             <p className="muted">Agregá productos para empezar tu pedido</p>
           </div>
         ) : (
+          <div className="modal-body">
           <div className="stack">
             {/* --- Free shipping progress --- */}
             <div className="shipping-progress-wrap">
@@ -225,16 +226,20 @@ export default function CartModal({
               />
             </div>
 
-            {/* --- Actions --- */}
-            <div className="cart-actions-v2">
-              <button className="btn-whatsapp" type="button" onClick={onSendWhatsApp}>
-                <span className="btn-whatsapp-icon">💬</span>
-                Enviar pedido por WhatsApp
-              </button>
-              <button className="btn-clear" type="button" onClick={onClear}>
-                Vaciar carrito
-              </button>
-            </div>
+          </div>
+          </div>
+        )}
+
+        {/* --- Actions (pinned footer, always visible, never clipped by scroll) --- */}
+        {cartItems.length > 0 && (
+          <div className="cart-actions-v2">
+            <button className="btn-whatsapp" type="button" onClick={onSendWhatsApp}>
+              <span className="btn-whatsapp-icon">💬</span>
+              Enviar pedido por WhatsApp
+            </button>
+            <button className="btn-clear" type="button" onClick={onClear}>
+              Vaciar carrito
+            </button>
           </div>
         )}
       </div>

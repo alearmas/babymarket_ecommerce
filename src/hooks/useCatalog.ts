@@ -17,7 +17,7 @@ export function useCatalog() {
         const dto = await fetchProducts(controller.signal);
         setRaw(dto.map(toCatalogItem));
       } catch (e) {
-        if ((e as any)?.name === "AbortError") return;
+        if (e instanceof DOMException && e.name === "AbortError") return;
         setError((e as Error).message ?? "Error desconocido");
       } finally {
         setLoading(false);

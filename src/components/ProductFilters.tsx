@@ -7,6 +7,9 @@ type Props = {
   search: string;
   setSearch: (v: string) => void;
 
+  category: string | null;
+  setCategory: (v: string | null) => void;
+
   brand: string | null;
   setBrand: (v: string | null) => void;
 
@@ -15,18 +18,25 @@ type Props = {
 };
 
 /**
- * Horizontal chip-style filters for brand and size.
+ * Horizontal chip-style filters for category, brand and size.
  * Only renders a filter row if the items actually have more than 1 option.
  */
 export default function ProductFilters({
   items,
   search,
   setSearch,
+  category,
+  setCategory,
   brand,
   setBrand,
   size,
   setSize,
 }: Props) {
+  const categories = useMemo(() => {
+    const set = new Set(items.map((i) => i.category).filter(Boolean));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [items]);
+
   const brands = useMemo(() => {
     const set = new Set(items.map((i) => i.brand).filter(Boolean));
     return Array.from(set).sort((a, b) => a.localeCompare(b));
@@ -43,6 +53,7 @@ export default function ProductFilters({
     });
   }, [items]);
 
+  const showCategories = categories.length > 1;
   const showBrands = brands.length > 1;
   const showSizes = sizes.length > 1;
 
@@ -64,6 +75,30 @@ export default function ProductFilters({
           </button>
         )}
       </div>
+      {showCategories && (
+        <div className="filter-row">
+          <span className="filter-label">Categoría</span>
+          <div className="filter-chips">
+            <button
+              type="button"
+              className={`chip ${category === null ? "chip--active" : ""}`}
+              onClick={() => setCategory(null)}
+            >
+              Todas
+            </button>
+            {categories.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className={`chip ${category === c ? "chip--active" : ""}`}
+                onClick={() => setCategory(category === c ? null : c)}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {showBrands && (
         <div className="filter-row">
           <span className="filter-label">Marca</span>
